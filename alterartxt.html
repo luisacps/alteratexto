@@ -1,8 +1,25 @@
-<html>
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-     <title>Prog Web II</title>
+	<meta charset="UTF-8">
+	<title>PW2</title>
+	<style>
+		html {
+		font-family: Arial, Sans-serif;
+		}
+	</style>
 </head>
-<body>
-     <script src="alterartxt.js"></script>
+<body onload="withDB(carregarTarefas)">
+	<h1>Atividade de Prog Web II</h1>
+	<p>Alterando o texto de uma lista</p>
+	
+	<button id="visualizarConcluidos">Visualizar Tudo</button>
+	<form action="">
+		<input type="text" id="digitar" name="novoItem" placeholder="Nova Tarefa">
+		<input type="submit" value="Adicionar">
+	</form
+	<div id="lista"></div>
+	
+	<script src="alterartxt.js"></script>
 </body>
 </html>
