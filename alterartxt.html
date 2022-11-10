@@ -6,8 +6,13 @@
 	<link rel="stylesheet" href="alterartxt.css">
 	<style id="oculto">
 		.oculto {
-			display = none;
+			display: none;
 		}
+        html {
+            font-family: Arial, Helvetica, sans-serif;
+            margin-top: 3em;
+            margin-left: 9em;
+        }
 	</style>
 </head>
 <body onload="withDB(carregarTarefas)">
@@ -18,7 +23,7 @@
 	<form action="">
 		<input type="text" id="digitar" name="novoItem" placeholder="Nova Tarefa">
 		<input type="submit" value="Adicionar">
-	</form
+    </form>
 	<div id="lista"></div>
 	
 	<script src="alteratxt.js"></script>
