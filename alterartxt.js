@@ -1,117 +1,167 @@
-let c = 0;
-const f = document.querySelector('form');
-f.addEventListener('submit', adicionarTarefa);
+let con = 0;
+const formulario = document.querySelector("form");
+formulario.addEventListener("submit", inserirTarefa);
 
-document.querySelector('#visualizarConcluidos').addEventListener('click', evento => {
-    const estilo = document.querySelector('#oculto');
-    estilo.disabled = !estilo.disabled;
+document.querySelector("#mostraEscondeConcluidos").addEventListener( "click", evento => {
+	const estilo = document.querySelector("#estiloOculto");
+	estilo.disabled = !estilo.disabled;
 });
-
-function inputTexto (f) {
-    const i = f.querySelector('input[type=text]');
-    const txt = i.value;
-    i.value = '';
-    i.focus();
-    return txt;
+function pegaTextoInput(formulario) {
+    const input = formulario.querySelector("input[type=text]");
+    const texto = input.value;
+    input.value = "";
+    input.focus();
+    return texto;
 }
 
 function inserirTarefa(evento) {
     evento.preventDefault();
-    const texto = inputTexto(evento.target);
-    if (texto == '') return;
-    const t = novaTarefa(texto);
-    document.querySelector('#lista').append(t);
-
+    const texto = pegaTextoInput(evento.target);
+    if (texto == "") return;
+    const tarefa = novaTarefa(texto);
+    document.querySelector("#lista").append(tarefa);
     withDB(db => {
-        let req = db.add({'texto': texto, 'feito': false});
-        req.onsucess = evento => {
-            t.setAtributte('id', `task-${evento.target.result}`);
-        }
-    })
+		let req = db.add({"texto": texto, "feito": false});
+		req.onsuccess = evento => {
+			tarefa.setAttribute('id', `task-${evento.target.result}`);
+		}
+    });
 }
 
 function novaTarefa(texto) {
-    const trf = document.createElement('p');
-    trf.append(gerarCheckbox())
-    trf.append(texto + " ");
-    trf.append(criarLixeira());
-        trf.append(criaEatualiza());
-    return trf
+	const tarefa = document.createElement("p");
+    tarefa.append(criarCheckbox());
+    tarefa.append(texto + " ");
+    tarefa.append(criarLixeira());
+	tarefa.append(criarAtualizar());
+    return tarefa;
 }
 
-function gerarCheckbox() {
-    const checkbox = document.createElement('input');
-    checkbox.setAttribute('type','checkbox');
-    checkbox.addEventListener('click', salvarCheck);
-    checkbox.addEventListener('click', estiloOculto);
+function criarCheckbox() {
+    const checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.addEventListener("click", salvarChecagem);
+    checkbox.addEventListener("click", atribuiEstiloOculto);
     return checkbox;
 }
 
-function estiloOculto(evento) {
+function atribuiEstiloOculto(evento) {
     if (evento.target.checked) {
-        evento.target.parentNode.classList.add('oculto');
-    }
-    else {
-        evento.target.parentNode.classList.remove('oculto');
+		evento.target.parentNode.classList.add("oculto");
+    } else {
+        evento.target.parentNode.classList.remove("oculto");
     }
 }
 
-function salvarCheck(eventoCheckbox) {
+function salvarChecagem(eventoCheckbox) {
     withDB(db => {
-        let id = evento.eventoCheckbox.target.parentNode.id;
+        let id = eventoCheckbox.target.parentNode.id;
         let key = parseInt(id.slice(5));
-        let r = db.get(key);
-        r.onsucess = eventoReq => {
-            let registrar = eventoReq.target.result;
-            registrar['concluído'] = eventoCheckbox.target.checked;
-            db.put(registrar, key)
+        let req = db.get(key);
+        req.onsuccess = eventoReq => {
+            let registro = eventoReq.target.result;
+            registro["feito"] = eventoCheckbox.target.checked;
+            db.put(registro, key);
         }
-    })
+    });
 }
 
 function criarLixeira() {
-    const lixo = document.createElement('span');
-    lixo.classList.add('fa');
-    lixo.classList.add('fa-trash-o');
-    lixo.addEventListener('click', removerTarefa);
-    return lixo;
+    const lixeira = document.createElement("span");
+    lixeira.classList.add("fa");
+    lixeira.classList.add("fa-trash-o");
+    lixeira.addEventListener("click", removerTarefa);
+    return lixeira;
 }
-
-function criaEatualiza() {
-    const atualizar = document.createElement('span');
-    atualizar.classList.add('fa');
-    atualizar.classList.add('fa-trash-o');
-    atualizar.addEventListener('click', atualizarTarefa);
-    return atualizar;
+function criarAtualizar() {
+	const atualiza = document.createElement("span");
+	atualiza.classList.add('fa');
+	atualiza.classList.add('fa-refresh');
+	atualiza.addEventListener('click', atualizaTarefa);
+	return atualiza;
 }
-
 function removerTarefa(evento) {
-    const lix = evento.target;
-    const tarefa = lix.parentNode;
+    const lixeira = evento.target;
+    const tarefa = lixeira.parentNode;
     tarefa.remove();
     withDB(db => {
         let id = tarefa.id;
         let key = parseInt(id.slice(5));
         db.delete(parseInt(key));
-    })
+    });
+}
+function atualizarTarefa(evento) {
+	const atualiza = evento.target;
+	const tarefa = atualiza.parentNode;
+	const elemento = tarefa.firstElementChild;
+	const texto = elemento.nextSibling.textContent;
+	const barra = document.getElementById('barraDigitar');
+	const form = document.querySelector('form');
+	barra.value = texto;
+	if (con == 0) {
+		const botao = document.createElement('button');
+		botao.innerHTML = 'Atualizar';
+		botao.setAttribute('id','atualizar');
+		botao.addEventListener('click',function () {
+		btnAtualiza(tarefa)
+		});
+		form.after(botao);
+		con = 1;	
+	}
+	
 }
 
-function atualizarTarefa(evento) {
-    const at = evento.target;
-    const tarefa = at.parentNode;
-    const el = tarefa.firstElementChild;
-    const texto = el.nextSibling.textContent;
-    const b = document.getElementById('barraDigitacao');
-    const form = document.querySelector('form')
-    b.value = texto;
-    if (con == 0) {
-        const botao = document.createElement('button');
-        botao.innerHTML = 'atualizar'
-        botao.setAttribute('id','atualizar');
-        botao.addEventListener('click', function() {
-        atualizarBtn(tarefa)
-        })
-        form.after(botao);
-        con = 1;
+function btnAtualiza (eventoAtualiza) {
+	const barra = document.getElementById('barraDigitar')
+	let tt = barra.value;
+	let id = eventoAtualiza.id;
+	texto = document.getElementById(id);
+	a = texto.childNodes[1];
+	a.textContent = tt + ' ';
+	barra.value = '';
+	barra.focus();
+	withDB(db => {
+        let key = parseInt(id.slice(5));
+		let req = db.get(key);
+        req.onsuccess = eventoReq => {
+            let registro = eventoReq.target.result;
+            registro["texto"] = tt;
+            db.put(registro, key);
+        }
+	});
+	g = document.getElementById('atualizar');
+	g.remove();
+	con = 0;
+}
+
+function withDB(callback) {
+    let request = indexedDB.open("listaTarefas", 1);
+    request.onerror = console.error;
+    request.onsuccess = () => {
+        let db = request.result;
+        callback(getStore(db));
     }
+    request.onupgradeneeded = () => {
+        let db = request.result;
+        db.createObjectStore("tarefas", {autoIncrement: true});
+    }
+	function getStore(db) {
+		return db.transaction(["tarefas"], "readwrite").objectStore("tarefas");
+    }
+}
+
+function carregarTarefas(db) {
+    db.openCursor().onsuccess = evento => {
+		let cursor = evento.target.result;
+        if (cursor) {
+            const tarefa = novaTarefa(cursor.value.texto);
+            document.querySelector("#lista").append(tarefa);
+            const id = cursor.key;
+            tarefa.setAttribute("id", `task-${id}`);
+            if (cursor.value.feito) {
+				tarefa.firstElementChild.click();
+            }
+			cursor.continue();
+        }
+        }
 }
