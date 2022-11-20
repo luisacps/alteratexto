@@ -1,25 +1,26 @@
 let con = 0;
 const formulario = document.querySelector("form");
-formulario.addEventListener("submit", inserirTarefa);
+formulario.addEventListener("submit", insereTarefa);
 
 document.querySelector("#mostraEscondeConcluidos").addEventListener( "click", evento => {
 	const estilo = document.querySelector("#estiloOculto");
 	estilo.disabled = !estilo.disabled;
 });
 function pegaTextoInput(formulario) {
-    const input = formulario.querySelector("input[type=text]");
+    const input = formulario.querySelector("input[type=text]"); //"input[type=text]" modo CSS de pegar o texto do input
     const texto = input.value;
     input.value = "";
     input.focus();
     return texto;
 }
 
-function inserirTarefa(evento) {
+function insereTarefa(evento) {
     evento.preventDefault();
     const texto = pegaTextoInput(evento.target);
     if (texto == "") return;
     const tarefa = novaTarefa(texto);
     document.querySelector("#lista").append(tarefa);
+    // salva tarefa
     withDB(db => {
 		let req = db.add({"texto": texto, "feito": false});
 		req.onsuccess = evento => {
@@ -30,17 +31,17 @@ function inserirTarefa(evento) {
 
 function novaTarefa(texto) {
 	const tarefa = document.createElement("p");
-    tarefa.append(criarCheckbox());
+    tarefa.append(criaCheckbox());
     tarefa.append(texto + " ");
-    tarefa.append(criarLixeira());
-	tarefa.append(criarAtualizar());
+    tarefa.append(criaLixeira());
+	tarefa.append(criaAtualiza());
     return tarefa;
 }
 
-function criarCheckbox() {
+function criaCheckbox() {
     const checkbox = document.createElement("input");
     checkbox.setAttribute("type", "checkbox");
-    checkbox.addEventListener("click", salvarChecagem);
+    checkbox.addEventListener("click", salvaChecagem);
     checkbox.addEventListener("click", atribuiEstiloOculto);
     return checkbox;
 }
@@ -53,7 +54,7 @@ function atribuiEstiloOculto(evento) {
     }
 }
 
-function salvarChecagem(eventoCheckbox) {
+function salvaChecagem(eventoCheckbox) {
     withDB(db => {
         let id = eventoCheckbox.target.parentNode.id;
         let key = parseInt(id.slice(5));
@@ -66,21 +67,21 @@ function salvarChecagem(eventoCheckbox) {
     });
 }
 
-function criarLixeira() {
+function criaLixeira() {
     const lixeira = document.createElement("span");
     lixeira.classList.add("fa");
     lixeira.classList.add("fa-trash-o");
-    lixeira.addEventListener("click", removerTarefa);
+    lixeira.addEventListener("click", removeTarefa);
     return lixeira;
 }
-function criarAtualizar() {
+function criaAtualiza() {
 	const atualiza = document.createElement("span");
 	atualiza.classList.add('fa');
 	atualiza.classList.add('fa-refresh');
 	atualiza.addEventListener('click', atualizaTarefa);
 	return atualiza;
 }
-function removerTarefa(evento) {
+function removeTarefa(evento) {
     const lixeira = evento.target;
     const tarefa = lixeira.parentNode;
     tarefa.remove();
@@ -90,7 +91,7 @@ function removerTarefa(evento) {
         db.delete(parseInt(key));
     });
 }
-function atualizarTarefa(evento) {
+function atualizaTarefa(evento) {
 	const atualiza = evento.target;
 	const tarefa = atualiza.parentNode;
 	const elemento = tarefa.firstElementChild;
