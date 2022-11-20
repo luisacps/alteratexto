@@ -7,7 +7,7 @@ document.querySelector("#mostraEscondeConcluidos").addEventListener( "click", ev
 	estilo.disabled = !estilo.disabled;
 });
 function pegaTextoInput(formulario) {
-    const input = formulario.querySelector("input[type=text]"); //"input[type=text]" modo CSS de pegar o texto do input
+    const input = formulario.querySelector("input[type=text]");
     const texto = input.value;
     input.value = "";
     input.focus();
@@ -20,7 +20,6 @@ function insereTarefa(evento) {
     if (texto == "") return;
     const tarefa = novaTarefa(texto);
     document.querySelector("#lista").append(tarefa);
-    // salva tarefa
     withDB(db => {
 		let req = db.add({"texto": texto, "feito": false});
 		req.onsuccess = evento => {
