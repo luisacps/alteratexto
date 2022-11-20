@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PW2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style id="estiloOculto">
         .oculto {
             display: none;
@@ -19,13 +20,13 @@
 <body onload="withDB(carregaTarefas)">
     <h1>Atividade de programação web II - lista de tarefas</h1>
 
-    <button id="mostraEscondeExcluidos">Visualizar tudo</button>
+    <button id="mostraEscondeConcluidos">Visualizar tudo</button>
     <form action="">
-        <input type="text" id="barraDigitar" name="novatarefa" placeholder="Adicionar nova tarefa">
+        <input type="text" id="barraDigitar" name="novatarefa" placeholder="Digite aqui uma nova tarefa">
         <input type="submit" value="Inserir">
     </form>
     <div id="lista"></div>
-
-    <script src="alterartxt.js"></script>
+    
+    <script type="text/javascript" src="alterartxt.js"> </script>
 </body>
 </html>
