@@ -150,7 +150,7 @@ function withDB(callback) {
     }
 }
 
-function carregarTarefas(db) {
+function carregaTarefas(db) {
     db.openCursor().onsuccess = evento => {
 		let cursor = evento.target.result;
         if (cursor) {
