@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-	<meta charset="UTF-8">
-	<title>PW2</title>
-	<link rel="stylesheet" href="alterartxt.css">
-	<style id="oculto">
-		.oculto {
-			display: none;
-		}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PW2</title>
+    <style id="estiloOculto">
+        .oculto {
+            display: none;
+        }
         html {
             font-family: Arial, Helvetica, sans-serif;
             margin-top: 3em;
             margin-left: 9em;
         }
-	</style>
+    </style>
 </head>
-<body onload="withDB(carregarTarefas)">
-	<h1>Atividade de Prog Web II</h1>
-	<p>Alterando o texto de uma lista</p>
-	
-	<button id="visualizarConcluidos">Visualizar Tudo</button>
-	<form action="">
-		<input type="text" id="digitar" name="novoItem" placeholder="Nova Tarefa">
-		<input type="submit" value="Adicionar">
+<body onload="withDB(carregaTarefas)">
+    <h1>Atividade de programação web II - lista de tarefas</h1>
+
+    <button id="mostraEscondeExcluidos">Visualizar tudo</button>
+    <form action="">
+        <input type="text" id="barraDigitar" name="novatarefa" placeholder="Adicionar nova tarefa">
+        <input type="submit" value="Inserir">
     </form>
-	<div id="lista"></div>
-	
-	<script src="alteratxt.js"></script>
+    <div id="lista"></div>
+
+    <script src="alterartxt.js"></script>
 </body>
 </html>
